@@ -1,4 +1,4 @@
-import Groups from './src/screens/Groups';
+import Groups from '@screens/Groups';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
