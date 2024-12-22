@@ -12,7 +12,7 @@ type?: ButtonIconTypeStyleProps;
 export function ButtonIcon({icon, type = "PRIMARY", ...rest}: Props)
 {
     return(
-        <Container>
+        <Container {...rest}>
             <Icon name={icon} type={type} />
         </Container>    
     );
