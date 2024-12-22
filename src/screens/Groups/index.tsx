@@ -2,11 +2,12 @@ import { Container} from './styles';
 import { Header } from '@components/Header';
 import { Highlight } from '@components/Highlight';
 import { GroupCard } from '@components/GroupCard';
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { ListEmpty } from '@components/ListEmpty';
 import { Button } from '@components/Button';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { groupsGetAll } from '@storage/group/groupsGetAll';
 
 export function Groups() {
 
@@ -17,6 +18,24 @@ export function Groups() {
     function handleNewGroup(){
       navigation.navigate("new")
     }
+
+    async function fetchGroups()
+    {
+      try{
+        const data = await groupsGetAll();
+        setGroups(data);
+      }catch(error){
+        console.log(error);
+      }
+    }
+
+    function handleOpenGroup(group: string){
+      navigation.navigate('players', {group : group});
+    }
+
+    useFocusEffect(useCallback(() => {
+      fetchGroups(); //useffect que funciona ate quando muda de tela e muda de estado
+    }, []));
 
     return (
     <Container>
@@ -33,6 +52,7 @@ export function Groups() {
             renderItem={({item}) => (
             <GroupCard 
                 title={item}
+                onPress={() => handleOpenGroup(item)}
             />
             )}
             contentContainerStyle={groups.length == 0 && { flex : 1}}
